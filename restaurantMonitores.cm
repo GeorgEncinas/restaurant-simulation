@@ -1,0 +1,98 @@
+//lo unico donde habria secuencialidad seria en que 
+//el camarero ni bien hace un pedido de comida hace un pedido de bebida
+//despues nope
+//
+monitor Restaurant
+{
+   
+    condition CAMARERO;
+    condition BARMAN;
+    condition COCINERO;
+    int pedidoComida; // cada que camarero hace un pedido esto aumenta en 1
+    int pedidoBebida; // cada que camarero hace un pedido esto aumenta en 1
+    int listoComida; // el cocinero prepara una comida restando 1 a pedidoComida y aumentando 1 a listoComida
+    int listoBebida; //el barman prepara una bebida restando 1 a pedidoBebida y aumentando 1 a listoBebida
+    int decisionAleatoria;
+    void ca(int id)
+    {
+        if( (listoComida >0) && (listoBebida > 0)){
+            cout<<"\t=========El camarero con id "<<id<<" procede a llevar a la mesa el pedido======"<<endl;
+            listoComida= listoComida -1 ;
+            listoBebida = listoBebida-1 ;
+        }
+        else{
+            decisionAleatoria = random(3);//probabilidad de que el camarero haga un pedido
+            if( decisionAleatoria == 1){
+                cout<<"Camarero "<<id<<" anota la orden"<<endl;
+   
+                cout<<"Camarero "<<id<<" solicita la comida"<<endl;    
+                pedidoComida = pedidoComida + 1;
+                signalc(COCINERO); 
+       
+                cout<<"Camarero "<<id<<" solicita la bebida"<<endl;
+                pedidoBebida = pedidoBebida + 1;       
+                signalc(BARMAN);
+            }
+            else
+                cout<<"Camarero con id "<<id<<"  no tiene nada que hacer por tanto espera"<<endl;
+        }
+    }
+    void ba(int id)
+    {
+        if(pedidoBebida == 0){
+            cout<<"##### Barman con id "<<id<<" no encuentra pedido alguno, por tanto espera ##### "<<endl;
+            if( (!empty(CAMARERO) )) //esta condicion es para que se encolen los barman en la cola de espera
+					// SIEMPRE Y CUANDO HAYA UN CAMARERO PORQUE SI NO SE TIRA EL PROGRAMA
+                waitc(BARMAN);
+        }
+        else{
+            cout<<"Barman con id "<<id<<" prepara la bebida                      *"<<endl;
+            listoBebida = listoBebida +1;
+            pedidoBebida = pedidoBebida -1;
+        }  
+    }
+    void co(int id)
+    {
+   
+        if (pedidoComida == 0){
+            cout<<"*********Cocinero con id "<<id<<" no encuentra pedido alguno, por tanto espera *********"<<endl;
+            if((!empty(CAMARERO ))) //mismo comentario que en barman
+                waitc(COCINERO);
+        }
+        else{
+            cout<<"Cocinero con id "<<id<<" prepara la comida               /"<<endl;
+            listoComida = listoComida +1;
+            pedidoComida = pedidoComida -1;
+        }
+   
+    }
+init{
+    pedidoComida = 0;
+    pedidoBebida = 0;
+    listoComida = 0;
+    listoComida = 0;
+}
+ 
+}  
+void camarero(int id)
+{
+    while(1)
+        ca(id);
+}
+void barman(int id)
+{
+    while(1)
+        ba(id);
+}
+void cocinero(int id)
+{
+    while(1)
+        co(id);
+}
+void main(){
+    cobegin{
+        camarero(1);//camarero(2);camarero(3);camarero(4);
+        barman(2);barman(1);barman(5);
+        cocinero(3);
+    }      
+}
