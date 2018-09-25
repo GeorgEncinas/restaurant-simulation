@@ -14,7 +14,7 @@ monitor Restaurant
     // int decisionAleatoria;  //obs no se necesita esta condicion
     void ca(int id) // camarero
     {
-        if( (listoComida >0) && (listoBebida0)){
+        if( (listoComida >0) && (listoBebida > 0)){
             cout<<"Camarero:  "<<id<<"\t\t procede a a servir al cliente"<<endl;
             cout<<endl;
             listoComida= listoComida -1 ;
@@ -22,9 +22,9 @@ monitor Restaurant
         }
         else{
             cout<<"Camarero:  "<<id<<"   anota la orden, luego solicita al bartman y cocinero"<<endl;
-            pedidoComida = pedidoComida1;
+            pedidoComida = pedidoComida+1;
             signalc(COCINERO); 
-            pedidoBebida = pedidoBebida1;       
+            pedidoBebida = pedidoBebida+1;       
             signalc(BARMAN);
         }
     }
@@ -50,7 +50,7 @@ monitor Restaurant
                 waitc(COCINERO);
         }
         else{
-            cout<<"Cocinero:  "<<id<<"  prepara la comida y pone al mostrador"<<endl;
+            cout<<"Cocinero:  "<<id<<"  prepara la comida y pone al [mostrador]"<<endl;
             listoComida = listoComida +1;
             pedidoComida = pedidoComida -1;
         }
