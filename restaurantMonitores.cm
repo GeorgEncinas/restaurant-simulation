@@ -12,47 +12,44 @@ monitor Restaurant
     int listoComida; // el cocinero prepara una comida restando 1 a pedidoComida y aumentando 1 a listoComida
     int listoBebida; //el barman prepara una bebida restando 1 a pedidoBebida y aumentando 1 a listoBebida
     // int decisionAleatoria;  //obs no se necesita esta condicion
-    void ca(int id) // camarero
-    {
-        if( (listoComida >0) && (listoBebida > 0)){
-            cout<<"Camarero:  "<<id<<"\t\t procede a a servir al cliente"<<endl;
-            cout<<endl;
-            listoComida= listoComida -1 ;
-            listoBebida = listoBebida-1 ;
+    void ca(int id){ // camarero
+        if ((listoComida > 0) && (listoBebida > 0)) {
+            cout << "Camarero:  " << id << "\t\t procede a servir al cliente" << endl;
+            cout << endl;
+            listoComida = listoComida - 1;
+            listoBebida = listoBebida - 1;
         }
-        else{
-            cout<<"Camarero:  "<<id<<"   anota la orden, luego solicita al bartman y cocinero"<<endl;
-            pedidoComida = pedidoComida+1;
-            signalc(COCINERO); 
-            pedidoBebida = pedidoBebida+1;       
+        else {
+            cout << "Camarero:  " << id << "   anota la orden, luego solicita al bartman y cocinero" << endl;
+            pedidoComida = pedidoComida + 1;
+            signalc(COCINERO);
+            pedidoBebida = pedidoBebida + 1;
             signalc(BARMAN);
         }
     }
-    void ba(int id)
-    {
-        if(pedidoBebida == 0){
-            cout<<"Barman:    "<<id<<"  no encuentra pedido alguno, por tanto espera"<<endl;
-            if( (!empty(CAMARERO) )) //esta condicion es para que se encolen los barman en la cola de espera
-				// SIEMPRE Y CUANDO HAYA UN CAMARERO PORQUE SI NO SE TIRA EL PROGRAMA
+    void ba(int id){
+        if (pedidoBebida == 0) {
+            cout << "Barman:    " << id << "  no encuentra pedido alguno, por tanto espera" << endl;
+            if ((!empty(CAMARERO))) //esta condicion es para que se encolen los barman en la cola de espera
+                // SIEMPRE Y CUANDO HAYA UN CAMARERO PORQUE SI NO SE TIRA EL PROGRAMA
                 waitc(BARMAN);
         }
-        else{
-            cout<<"Barman:    "<<id<<"  prepara la bebida y pone al [mostrador]"<<endl;
-            listoBebida = listoBebida +1;
-            pedidoBebida = pedidoBebida -1;
-        }  
+        else {
+            cout << "Barman:    " << id << "  prepara la bebida y pone al [mostrador]" << endl;
+            listoBebida = listoBebida + 1;
+            pedidoBebida = pedidoBebida - 1;
+        }
     }
-    void co(int id)
-    {
-        if (pedidoComida == 0){
-            cout<<"Cocinero:  "<<id<<"  no encuentra pedido alguno, por tanto espera"<<endl;
-            if((!empty(CAMARERO ))) //mismo comentario que en barman
+    void co(int id){
+        if (pedidoComida == 0) {
+            cout << "Cocinero:  " << id << "  no encuentra pedido alguno, por tanto espera" << endl;
+            if ((!empty(CAMARERO))) //mismo comentario que en barman
                 waitc(COCINERO);
         }
-        else{
-            cout<<"Cocinero:  "<<id<<"  prepara la comida y pone al [mostrador]"<<endl;
-            listoComida = listoComida +1;
-            pedidoComida = pedidoComida -1;
+        else {
+            cout << "Cocinero:  " << id << "  prepara la comida y pone al [mostrador]" << endl;
+            listoComida = listoComida + 1;
+            pedidoComida = pedidoComida - 1;
         }
     }
 
@@ -63,26 +60,23 @@ monitor Restaurant
         listoBebida = 0;
     }
 
-}  
-void camarero(int id)
-{
-    while(1)
+}
+void camarero(int id){
+    while (1)
         ca(id);
 }
-void barman(int id)
-{
-    while(1)
+void barman(int id){
+    while (1)
         ba(id);
 }
-void cocinero(int id)
-{
-    while(1)
+void cocinero(int id){
+    while (1)
         co(id);
 }
 void main(){
     cobegin{
-        camarero(1);camarero(2);//camarero(3);camarero(4);camarero(5);
-        barman(10);barman(11);//barman(12);//barman(13);barman(14);barman(15);
-        cocinero(20);cocinero(21);//cocinero(22);//cocinero(23);cocinero(24);cocinero(25);
-    }      
+        camarero(1); camarero(2);//camarero(3);camarero(4);camarero(5);
+        barman(10); barman(11);//barman(12);//barman(13);barman(14);barman(15);
+        cocinero(20); cocinero(21);//cocinero(22);//cocinero(23);cocinero(24);cocinero(25);
+    }
 }
