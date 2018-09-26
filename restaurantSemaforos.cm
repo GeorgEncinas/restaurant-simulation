@@ -17,13 +17,11 @@ void camarero(int id){
 			signal(proc);
 		}
 		else{
-		cout<<"Camarero:  "<<id<<"  anota la orden, luego solicita al bartman y cocinero"<<endl;
+		cout<<"Camarero:  "<<id<<"  anota la orden, luego solicita al barman y cocinero"<<endl;
 		signal(talk);
 		pedidoComida = pedidoComida+1;
-		signal(proc);
 		pedidoBebida = pedidoBebida+1;
 		signal(proc);
-		wait(proc);
 		}
 	}
 }
@@ -64,9 +62,9 @@ void cocinero(int id){
 
 void main(){
 	cobegin{
-		camarero(11);//camarero(12);camarero(13);
-		barman(21);//barman(22);barman(23);
-		cocinero(31);//cocinero(32);cocinero(33);
+		camarero(11);camarero(12);camarero(13);
+		barman(21);barman(22);barman(23);
+		cocinero(31);cocinero(32);cocinero(33);
 	}
 
 }
