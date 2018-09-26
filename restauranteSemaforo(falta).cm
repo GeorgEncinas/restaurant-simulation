@@ -1,0 +1,68 @@
+semaphore cam = 1;
+semaphore coc = 0;
+semaphore bar = 0;
+semaphore talk = 1;
+
+semaphore proc =1;
+
+int pedidoComida=0, pedidoBebida=0;
+int listoComida=0, listoBebida=0;
+
+void camarero(int id){
+	while(1){
+		wait(proc);
+		if((listoComida>0)&&(listoBebida>0)){
+			cout<<"\t Camamero "<<id<< " sirve la ORDEN"<<endl;
+			cout<<endl;
+		}
+		cout<<"Camarero "<<id<< " anota ORDEN, luego solicita al barman y al cocinero"<<endl;
+		pedidoComida = pedidoComida+1;
+		wait(talk);
+		signal(proc);
+		pedidoBebida = pedidoBebida+1;
+		signal(proc);
+		signal(talk);
+		wait(proc);
+	}
+}
+
+void barman(int id){
+	while(1){
+		wait(proc);
+		wait(talk);
+		if(pedidoBebida==0){
+			cout<<"Barman "<<id<< " no tiene ordenes, ESPERA"<<endl;
+		}else{
+			cout<<"Barman "<<id<< " prepara la bebida y la pone en el MOSTRADOR"<<endl;
+			listoBebida++;
+			pedidoBebida--;
+		}
+		signal(talk);
+		signal(proc);
+	}
+}
+
+void cocinero(int id){
+	while(1){
+		wait(proc);
+		wait(talk);
+		if(pedidoComida==0){
+			cout<<"Cocinero "<<id<< " no tiene ordenes, ESPERA"<<endl;
+		}else{
+			cout<<"Cocinero "<<id<< " prepara la comida y la pone en el MOSTRADOR"<<endl;
+			listoComida++;
+			pedidoComida--;
+		}
+		signal(proc);
+		signal(talk);
+	}
+}
+
+void main(){
+	cobegin{
+		camarero(1);//camarero(2);//camarero(3);
+		barman(1);barman(2);barman(3);
+		cocinero(1);cocinero(2);cocinero(3);
+	}
+
+}
