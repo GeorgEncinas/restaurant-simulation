@@ -75,8 +75,8 @@ void cocinero(int id){
 }
 void main(){
     cobegin{
-        camarero(1); camarero(2);//camarero(3);camarero(4);camarero(5);
-        barman(10); barman(11);//barman(12);//barman(13);barman(14);barman(15);
+        //camarero(1); camarero(2);//camarero(3);camarero(4);camarero(5);
+        //barman(10); //barman(11);//barman(12);//barman(13);barman(14);barman(15);
         cocinero(20); cocinero(21);//cocinero(22);//cocinero(23);cocinero(24);cocinero(25);
     }
 }

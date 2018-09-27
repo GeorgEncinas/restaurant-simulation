@@ -62,9 +62,9 @@ void cocinero(int id){
 
 void main(){
 	cobegin{
-		camarero(11);camarero(12);camarero(13);
-		barman(21);barman(22);barman(23);
-		cocinero(31);cocinero(32);cocinero(33);
+		camarero(11);camarero(12);//camarero(13);
+		barman(21);//barman(22);barman(23);
+//		cocinero(31);//cocinero(32);cocinero(33);
 	}
 
 }
