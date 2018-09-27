@@ -8,6 +8,8 @@
 *.log
 *.txt
 
+# PowerPoint temporary #
+~$*.ppt*
 
 # Packages #
 ############
