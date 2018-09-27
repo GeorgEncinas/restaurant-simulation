@@ -1,0 +1,203 @@
+#include "gdefs.cm"
+
+//lo unico donde habria secuencialidad seria en que 
+//el camarero ni bien hace un pedido de comida hace un pedido de bebida
+//despues nope
+//
+
+
+//GRAFICOS:
+//TRIANGULO -> COCINERO
+//CIRCULO ->CAMARERO
+// CUADRADO-> BARTMAN
+//ROJO  esta esperando
+//VERDE	comida esta en mostrador, bebida esta en mostrador y  camarero sirve a cliente
+//AMARILLO  camarero esta recibiendo pedido
+//AZUL  bartman esta preparando bebida y cocinero esta preparando comida
+
+const int pos_x_cam1 = 150;	//pocision inicial x de camarero1
+const int pos_y_cam1 = 300;	//pocision inicial y de camarero1
+
+const int pos_x_cam2 = 250;	//pocision inicial x de camarero2
+const int pos_y_cam2 = 300;	//pocision inicial y de camarero2
+
+const int pos_x_cam3 = 350;	//pocision inicial x de camarero3
+const int pos_y_cam3 = 300;	//pocision inicial y de camarero3
+
+//int pos_cam[1000];
+int pos_bar[1000];
+int pos_coc[1000];
+
+int modo_cliente= 11;
+int modo_coc_bar= 22;
+
+int mesa1 = 10;
+int mesa2 = 20;
+int mesa3 = 30;
+int cam1 = 1;
+int cam2 = 2;
+int cam3 = 3;
+int bar1 = 4;
+int coc1 = 5;
+int bar2 = 6;
+int coc2 = 7;
+
+
+
+monitor Restaurant
+{
+
+void moverCamarero(int id_cam,int modo){
+
+	switch(modo){
+	    case modo_cliente: //
+		switch (id_cam){
+//		  changecolor(id_cam,green);
+		   case cam1:
+			moveto(cam1,pos_x_cam1,pos_y_cam1);break;
+		   case cam2:
+			moveto(cam1,pos_x_cam2,pos_y_cam2);break;
+		   case cam3:
+			moveto(cam1,pos_x_cam3,pos_y_cam3);break;
+		 }
+	    case modo_coc_bar:
+		//changecolor(id_cam, YELLOW)
+		moveto(id_cam,(150+(id_cam-1)*100),300);
+	    break;
+	}
+
+}
+    condition CAMARERO;
+    condition BARMAN;
+    condition COCINERO;
+    int pedidoComida; // cada que camarero hace un pedido esto aumenta en 1
+    int pedidoBebida; // cada que camarero hace un pedido esto aumenta en 1
+    int listoComida; // el cocinero prepara una comida restando 1 a pedidoComida y aumentando 1 a listoComida
+    int listoBebida; //el barman prepara una bebida restando 1 a pedidoBebida y aumentando 1 a listoBebida
+    // int decisionAleatoria;  //obs no se necesita esta condicion
+
+
+void ca(int id) // camarero
+    {int j;
+        if( (listoComida >0) && (listoBebida > 0)){
+            cout<<"Camarero:  "<<id<<"\t\t procede a a servir al cliente"<<endl;
+            cout<<endl;
+	    moverCamarero(id,modo_cliente);///////////
+         //for (j=1;j < 200; j++){	}
+   	  //changecolor(id,GREEN);
+	   // moveto(id,310,150);
+	   // for (j=1;j < 200; j++){	}
+	   //// moveto(id,120,270);	
+	    //changecolor(id,RED);
+	    //for (j=1;j < 200; j++){	} 
+            listoComida= listoComida -1 ;
+            listoBebida = listoBebida-1 ;
+        }
+        else{
+		//moveto(id,120,270);
+		//for (j=1;j < 200; j++){	}
+            cout<<"Camarero:  "<<id<<"   anota la orden, luego solicita al bartman y cocinero"<<endl;
+	    moverCamarero(id,modo_coc_bar);
+		//changecolor(id,YELLOW);   
+	    //moveto(id,310,150);
+		// for (j=1;j < 150; j++){}
+	     pedidoComida = pedidoComida+1;
+            signalc(COCINERO); 
+	    changecolor(bar1,BLUE);
+            for (j=1;j < 200; j++){	}  
+            pedidoBebida = pedidoBebida+1;       
+            signalc(BARMAN);
+	    //moveto(id,280,150);	
+           // for (j=1;j < 200; j++){}
+	    changecolor(coc1,BLUE);   
+ 	    // for (j=1;j < 200; j++){	}	
+		
+        }
+    }
+    void ba(int id)
+    { int z;
+        if(pedidoBebida == 0){
+            cout<<"Barman:    "<<id<<"  no encuentra pedido alguno, por tanto espera"<<endl;
+	    changecolor(id,RED);  
+          for (z=1;z < 150; z++){}
+            if( (!empty(CAMARERO) )) //esta condicion es para que se encolen los barman en la cola de espera
+				// SIEMPRE Y CUANDO HAYA UN CAMARERO PORQUE SI NO SE TIRA EL PROGRAMA
+                waitc(BARMAN);
+
+		//changecolor(id,RED);
+		 //for (z=1;z < 400; z++){	}
+
+        }
+        else{
+            cout<<"Barman:    "<<id<<"  prepara la bebida y pone al [mostrador]"<<endl;
+	    changecolor(id,GREEN);  
+	
+	    moveto(cam1,310,150);
+		for(z=1;z<300;z++){
+		}	
+            listoBebida = listoBebida +1;
+            pedidoBebida = pedidoBebida -1;
+        }  
+    }
+    void co(int id)
+    {int z;
+	  if (pedidoComida == 0){
+            cout<<"Cocinero:  "<<id<<"  no encuentra pedido alguno, por tanto espera"<<endl;
+            changecolor(id,RED); 
+	   for (z=1;z < 300; z++){	} 
+	    if((!empty(CAMARERO ))) //mismo comentario que en barman
+                waitc(COCINERO);
+	
+        }
+        else{
+            cout<<"Cocinero:  "<<id<<"  prepara la comida y pone al [mostrador]"<<endl;
+	    changecolor(id,GREEN); 
+	   for(z=1;z<300;z++){}	
+			   
+            listoComida = listoComida +1;
+            pedidoComida = pedidoComida -1;
+        }
+    }
+
+    init{
+        pedidoComida = 0;
+        pedidoBebida = 0;
+        listoComida = 0;
+        listoBebida = 0;
+    }
+
+}  
+void camarero(int id)
+{int j;
+    while(1)
+ //  for (j=1;j < 10; j++){	}
+	ca(id);
+}
+void barman(int id)
+{
+    while(1)
+        ba(id);
+}
+void cocinero(int id)
+{
+    while(1)
+        co(id);
+}
+void main(){
+
+	create(mesa1,RECTANGLE,MAGENTA,150,330,70,50);
+	create(mesa2,RECTANGLE,MAGENTA,250,330,70,50);
+	create(mesa3,RECTANGLE,MAGENTA,350,330,70,50);
+	create(coc1,TRIANGLE,MAGENTA,250,100,40,40);
+	create(bar1,RECTANGLE,MAGENTA,300,100,40,40);
+	create(cam1,CIRCLE,MAGENTA,pos_x_cam1,pos_y_cam1,30,0);
+	create(cam2,CIRCLE,MAGENTA,pos_x_cam2,pos_y_cam2,30,0);
+	create(cam3,CIRCLE,MAGENTA,pos_x_cam3,pos_y_cam3,30,0);
+    cobegin{
+        camarero(2);//camarero(2);//camarero(3);
+        barman(4);//barman();barman(12);
+        cocinero(5);//cocinero(21);
+}
+
+//	exit(0);
+}
